@@ -1,57 +1,27 @@
-let mapimg;
-var clat = 0;
-var clon = 0;
-var ww = 800;
-var hh = 512;
 var zoom = 1;
 let curr_ip_data;
 let map_img;
-function preload() {
-  // The clon and clat in this url are edited to be in the correct order.
-  mapimg = loadImage('https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/' +
-    clon + ',' + clat + ',' + zoom + '/' +
-    ww + 'x' + hh +
-    '?access_token=pk.eyJ1IjoiY29kaW5ndHJhaW4iLCJhIjoiY2l6MGl4bXhsMDRpNzJxcDh0a2NhNDExbCJ9.awIfnl6ngyHoB3Xztkzarw');
-  // earthquakes = loadStrings('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.csv');
-//  earthquakes = loadStrings('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.csv');
-}
-
 function setup()
 {
 	//createCanvas(ww,hh);
 	translate(width/2,height/2);
 	imageMode(CENTER);
-	//image(mapimg,0,0); 	
 	$.getJSON('http://gd.geobytes.com/GetCityDetails?callback=?', function(data) {
-		//console.log(data);
 		let data_cp=data;
 	  curr_ip_data=data.geobytesipaddress;
-	  console.log(curr_ip_data);
 	$.getJSON("http://api.ipstack.com/"+curr_ip_data+"?access_key=795b81a0c1ee039639d33b6e46f101f3",function(data){
-		console.log(data.city);
-		//console.log(data)
-	// 	L.mapbox.accessToken = 'pk.eyJ1Ijoic20zMjMyNjUiLCJhIjoiY2p0YWJuNTIxMDlmNDQzczBoMDY4dzJrZiJ9.xhu8kG-r2BhRZ3hNBca3IQ';
-  	// 	var map = L.mapbox.map('map')
-    //   .setView([data.latitude, data.longitude], 9)
-      //.addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
-	//map_img = createImg('https://api.mapbox.com/v4/mapbox.emerald/'+data.latitude+','+data.longitude+',13/300x150@2x.png?access_token=pk.eyJ1Ijoic20zMjMyNjUiLCJhIjoiY2p0YWJuNTIxMDlmNDQzczBoMDY4dzJrZiJ9.xhu8kG-r2BhRZ3hNBca3IQ')
 	map_img=createImg('https://dev.virtualearth.net/REST/V1/Imagery/Map/Road/'+data.latitude+'%2C'+data.longitude+'/13?mapSize=500,250&format=png&pushpin='+data.latitude+','+data.longitude+';64;Hi&key=AqB0MpU-01rhZ-j_isOHf_fad-KN7EFYtospc-vBpnwwVtZxbYFVqH3rviMasWAQ');
-	
-	console.log(map_img);
-	//map_img.hide();
 	image(map_img,0,0);
 	let current_city=createDiv();
 		current_city.style("font-size","28pt")
 		current_city.html('Hello, You are in '+data.city);
 		let latitude=data.latitude;
-		console.log(latitude);
 		$.getJSON('https://openweathermap.org/data/2.5/weather?q='+data.city+'&appid=b6907d289e10d714a6e88b30761fae22',function(weather_raw){
 			let banner=createDiv();
 			banner.style("text-shadow", "0.5px 0.5px #000000");
 			banner.style("font-size","20pt");
 			banner.html("Weather In your Area:");
 			let switch_to_fahr=createButton('Switch To Fahrenheit');
-			console.log(weather_raw);
 			let temperature=createDiv();
 			temperature.style("text-shadow", "0.5px 0.5px #000000");
 			temperature.style("font-size","15pt");
@@ -84,7 +54,6 @@ function setup()
 			
 			if(weather_raw.main.pressure!==undefined)
 			{
-				//pressure=createDiv();
 				pressure.html('Pressure : '+weather_raw.main.pressure+" milliBars");
 			}
 			else
@@ -156,10 +125,7 @@ function setup()
 					switch_to_fahr2.html('Switch To Fahrenheit');
 					cel_b2=true;
 				}
-				//map_img.hide();
 				}
-				//humidity.html('Humidity : '+search_weather_raw.humidity+"%");
-				console.log(search_weather_raw);
 
 			});
 			
@@ -168,13 +134,7 @@ function setup()
 
 		});
 });
-	//console.log(n);
 });
-//console.log(curr_ip_data);
 
 
 }
-// function draw()
-// {
-// 	background(0);
-// }
